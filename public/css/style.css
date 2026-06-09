@@ -1,0 +1,166 @@
+/* ==========================================================================
+   1. VARIABLES GLOBALES (Configuración de Colores por Rol)
+   ========================================================================== */
+:root {
+    --sidebar-width: 250px;
+    --transition-speed: 0.3s;
+    
+    /* Colores por Rol */
+    --user-green: #28a745;
+    --editor-yellow: #ffc107;
+    --admin-red: #dc3545;
+    --dark-neutral: #1a1d20;
+}
+
+/* ==========================================================================
+   2. ESTILOS BASE Y LOGIN
+   ========================================================================== */
+body {
+    background-color: #f4f7f6;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin: 0;
+}
+
+/* Tarjeta de Login / Registro */
+.login-card {
+    background-color: #ffffff;
+    border-top: 5px solid var(--user-green);
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.btn-futbol {
+    background-color: var(--user-green);
+    border: none;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition-speed);
+}
+
+.btn-futbol:hover {
+    background-color: #218838;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.form-label {
+    color: #495057;
+    font-weight: 500;
+}
+
+.form-control:focus {
+    border-color: var(--user-green);
+    box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+}
+
+/* Badges de Roles */
+.badge-espectador { background-color: var(--user-green); color: white; }
+.badge-editor { background-color: var(--editor-yellow); color: black; }
+.badge-admin { background-color: var(--admin-red); color: white; padding: 0.5em 1em; }
+
+/* ==========================================================================
+   3. ESTRUCTURA MAESTRA (Layout Paneles)
+   ========================================================================== */
+.content, .main-content {
+    margin-left: var(--sidebar-width);
+    padding: 20px;
+    min-height: 100vh;
+    transition: all var(--transition-speed);
+}
+
+.navbar-custom {
+    margin-left: var(--sidebar-width);
+    background: white;
+    border-bottom: 1px solid #dee2e6;
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all var(--transition-speed);
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 1rem 0;
+}
+
+/* ==========================================================================
+   4. SIDEBAR ESTRUCTURAL COMPARTIDO
+   ========================================================================== */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+    z-index: 1000;
+    transition: all var(--transition-speed);
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar .nav-link {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+/* ==========================================================================
+   5. VARIACIONES DE COLOR POR CLASE DE ROL (Evita que se pisen)
+   ========================================================================== */
+
+/* --- VARIACIÓN: ESPECTADOR (VERDE) --- */
+.sidebar-user {
+    background-color: var(--user-green);
+    color: white;
+}
+.sidebar-user .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+}
+.sidebar-user .nav-link:hover, 
+.sidebar-user .nav-link.active {
+    color: white;
+    background: rgba(0, 0, 0, 0.1);
+    border-left: 5px solid white;
+}
+
+/* --- VARIACIÓN: EDITOR (AMARILLO) --- */
+.sidebar-editor {
+    background-color: var(--editor-yellow);
+    color: var(--dark-neutral);
+}
+.sidebar-editor .nav-link {
+    color: rgba(0, 0, 0, 0.7);
+}
+.sidebar-editor .nav-link:hover, 
+.sidebar-editor .nav-link.active {
+    color: black;
+    background: rgba(255, 255, 255, 0.3);
+    border-left: 5px solid var(--dark-neutral);
+}
+
+/* --- VARIACIÓN: ADMINISTRADOR (ROJO) --- */
+.sidebar-admin {
+    background-color: var(--admin-red);
+    color: white;
+}
+.sidebar-admin .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+}
+.sidebar-admin .nav-link:hover, 
+.sidebar-admin .nav-link.active {
+    color: white;
+    background: rgba(0, 0, 0, 0.1);
+    border-left: 5px solid white;
+}

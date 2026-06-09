@@ -10,6 +10,19 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+
+// Un usuario pertenece a un Rol
+public function role() {
+    return $this->belongsTo(Role::class);
+}
+// Un usuario puede escribir muchos Posts
+public function posts() {
+    return $this->hasMany(Post::class);
+}
+// Un usuario puede dejar muchos comentarios
+public function comments() {
+    return $this->hasMany(Comment::class);
+}
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 

@@ -11,7 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Tabla de Usuarios (Modificada con el Rol para el CRUD de Admin)
+        // A. PRIMERO CREAMOS LA TABLA DE ROLES
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre')->unique();
+            $table->timestamps();
+        });
+
+        // B. DESPUÉS CREAMOS LA TABLA DE USUARIOS (Ya puede usar la FK sin romper nada)
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -19,21 +26,21 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             
-            // Agregamos la relación con la tabla roles (por defecto 3 = Espectador)
+            // Relación directa con la tabla de arriba
             $table->foreignId('role_id')->default(3)->constrained('roles')->onDelete('cascade');
             
             $table->rememberToken();
             $table->timestamps();
         });
 
-        // 2. Tabla para recuperar contraseña (NO BORRAR, la usa Breeze)
+        // C. TABLA DE RECUPERACIÓN DE CONTRASEÑA (Breeze)
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
-        // 3. Tabla para controlar las sesiones (NO BORRAR, la usa Laravel)
+        // D. TABLA DE SESIONES (Laravel)
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
@@ -49,8 +56,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('roles'); // Borramos roles al final en el down
     }
 };
