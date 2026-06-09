@@ -6,7 +6,7 @@
         <div class="card-body p-4">
             
             <p class="text-secondary small mb-4">
-                {{ __('Esta es un área segura de la aplicación. Por favor, confirma tu contraseña antes de continuar.') }}
+                {{ __('Confirme su contraseña.') }}
             </p>
 
             @if ($errors->any())
