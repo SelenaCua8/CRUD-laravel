@@ -22,7 +22,7 @@
                     <i class="bi bi-speedometer2 me-2"></i> Panel de Control
                 </h5>
                 <div class="d-flex align-items-center gap-3">
-                    <span class="fw-semibold text-dark">{{ Auth::user()->name }}</span>
+                   <span class="fw-semibold text-dark">{{ Auth::user()->name ?? 'Invitado' }}</span>
                    <!-- <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill fw-bold">
