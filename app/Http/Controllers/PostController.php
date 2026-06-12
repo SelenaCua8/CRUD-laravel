@@ -23,12 +23,16 @@ class PostController extends Controller
         $etiquetas = DB::table('tags')->get(); 
         
         // Simulación de comentarios para la pestaña de moderación del parcial
-        $comentarios = [
-            ['id' => 1, 'usuario' => 'Goloide99', 'texto' => '¡Tremenda la info del Cuti! Llega bien al debut.', 'post' => 'Alerta por el Cuti'],
-            ['id' => 2, 'usuario' => 'LichaFan', 'texto' => 'Para mí tiene que jugar Lisandro Martínez si el Cuti no está al 100%.', 'post' => 'Alerta por el Cuti']
-        ];
+       // Comentarios reales de la base de datos para moderar
+$comentarios = DB::table('comments')
+    ->join('users', 'comments.user_id', '=', 'users.id')
+    ->join('posts', 'comments.post_id', '=', 'posts.id')
+    ->select('comments.*', 'users.name as usuario', 'posts.titulo as post')
+    ->get();
 
         return view('editor.dashboard', compact('posts', 'categorias', 'etiquetas', 'comentarios'));
+
+        
     }
 
     // 2. CRUD: Guardar Publicación en la Base de Datos
@@ -54,18 +58,19 @@ class PostController extends Controller
         return redirect()->back()->with('success', '¡Crónica publicada con éxito!');
     }
 
-    // 3. CRUD: Crear Categoría desde el Panel
+    // 3. CRUD: Crear Categoría desde el Panel (¡CON SLUG INCLUIDO!)
     public function storeCategoria(Request $request)
     {
         $request->validate(['name' => 'required|string|max:255']);
         
         DB::table('categories')->insert([
-            'name' => $request->name,
+            'nombre' => $request->name, 
+            'slug' => \Illuminate\Support\Str::slug($request->name), // <-- ESTO GENERA EL SLUG AUTOMÁTICO
             'created_at' => now(),
             'updated_at' => now()
         ]);
 
-        return redirect()->back()->with('success', 'Categoría guardada.');
+        return redirect()->back()->with('success', '¡Categoría guardada con éxito!');
     }
 
     // 4. CRUD: Crear Etiqueta (Tag) desde el Panel
@@ -74,7 +79,7 @@ class PostController extends Controller
         $request->validate(['name' => 'required|string|max:255']);
         
         DB::table('tags')->insert([
-            'name' => $request->name,
+            'nombre' => $request->name, 
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -89,4 +94,34 @@ class PostController extends Controller
         $post->delete();
         return redirect()->back()->with('success', 'Publicación eliminada de la plataforma.');
     }
+
+    // 6. CRUD: Eliminar Categoría desde el Editor
+    public function destroyCategoria($id)
+    {
+        DB::table('categories')->where('id', $id)->delete();
+        return redirect()->back()->with('success', 'Categoría eliminada con éxito.');
+    }
+
+    // 7. CRUD: Eliminar Etiqueta desde el Editor
+    public function destroyEtiqueta($id)
+    {
+        DB::table('tags')->where('id', $id)->delete();
+        return redirect()->back()->with('success', 'Etiqueta eliminada con éxito.');
+    }
+
+    // 8. MODERACIÓN: Eliminar/Rechazar comentario (Ajustado para simulación segura)
+  public function destroyComentario($id)
+{
+    DB::table('comments')->where('id', $id)->delete();
+    return redirect()->back()->with('success', 'Comentario moderado y eliminado correctamente.');
+}
+
+// NUEVO: El Editor aprueba el comentario cambiándole el estado
+    public function aprobarComentario($id)
+    {
+        DB::table('comments')->where('id', $id)->update(['estado' => 'aprobado', 'updated_at' => now()]);
+        return redirect()->back()->with('success', 'Comentario aprobado. Ya se ve en el blog público.');
+    }
+
+    
 }

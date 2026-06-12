@@ -18,11 +18,22 @@ class PublicController extends Controller
         return view('welcome', compact('posts', 'categorias'));
     }
 
-    // Detalle de una publicación específica (¡Ahora visible para el Admin también!)
+    // Detalle de una publicación específica con sus comentarios aprobados
     public function show($id)
     {
+        // 1. Buscamos el post por ID
         $post = Post::findOrFail($id);
-        return view('public.detalle', compact('post'));
+
+        // 2. Traemos ÚNICAMENTE los comentarios de este post que estén 'aprobado' (Uniendo con la tabla users para el nombre)
+        $comentarios = DB::table('comments')
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->where('comments.post_id', $id)
+            ->where('comments.estado', 'aprobado') // <-- Usa 'aprobado' que es el valor real de tu migración
+            ->select('comments.*', 'users.name as nombre_usuario')
+            ->orderBy('comments.created_at', 'desc')
+            ->get();
+
+        return view('public.detalle', compact('post', 'comentarios'));
     }
 
     // Listado de publicaciones filtradas por categoría

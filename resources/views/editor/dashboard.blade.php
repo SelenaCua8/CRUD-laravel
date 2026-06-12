@@ -18,19 +18,16 @@
 
 @section('contenido')
 <div class="container-fluid p-0">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold text-dark m-0">Espacio de Trabajo del Editor</h3>
-    </div>
-
+    
     <ul class="nav nav-tabs mb-4" id="editorTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active fw-semibold text-dark" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts-pane" type="button" role="tab"><i class="bi bi-file-earmark-text me-2"></i>Publicaciones (CRUD)</button>
+        <li class="nav-item">
+            <button class="nav-link active fw-bold text-dark" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts-pane" type="button" role="tab"><i class="bi bi-file-earmark-text me-1"></i> Publicaciones (CRUD)</button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link fw-semibold text-dark" id="taxonomias-tab" data-bs-toggle="tab" data-bs-target="#taxonomias-pane" type="button" role="tab"><i class="bi bi-tags me-2"></i>Categorías y Etiquetas</button>
+        <li class="nav-item">
+            <button class="nav-link fw-bold text-dark" id="taxonomias-tab" data-bs-toggle="tab" data-bs-target="#taxonomias-pane" type="button" role="tab"><i class="bi bi-tags me-1"></i> Categorías y Etiquetas</button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link fw-semibold text-dark" id="comentarios-tab" data-bs-toggle="tab" data-bs-target="#comentarios-pane" type="button" role="tab"><i class="bi bi-chat-left-dots me-2"></i>Moderación de Comentarios</button>
+        <li class="nav-item">
+            <button class="nav-link fw-bold text-dark" id="comentarios-tab" data-bs-toggle="tab" data-bs-target="#comentarios-pane" type="button" role="tab"><i class="bi bi-chat-left-dots me-1"></i> Moderación</button>
         </li>
     </ul>
 
@@ -39,38 +36,40 @@
         <div class="tab-pane fade show active" id="posts-pane" role="tabpanel">
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-4 rounded-3 bg-white border-top border-warning border-4">
-                        <h5 class="fw-bold text-dark mb-3">Nueva Nota</h5>
+                    <div class="card border-0 shadow-sm p-4 bg-white border-top border-warning border-4 rounded-3">
+                        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-pencil-square text-warning me-2"></i>Nueva Nota</h5>
                         <form action="{{ route('editor.posts.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label small fw-bold">Título</label>
-                                <input type="text" name="titulo" class="form-control form-control-sm" required placeholder="Título deportivo...">
+                                <label class="form-label small fw-semibold">Título del Artículo</label>
+                                <input type="text" name="titulo" class="form-control form-control-sm" required placeholder="Ej: Histórico triunfo argentino">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small fw-bold">Categoría Asociada</label>
+                                <label class="form-label small fw-semibold">Categoría Relacionada</label>
                                 <select name="category_id" class="form-select form-select-sm" required>
-                                    @foreach($categorias as $cat)
-                                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                                    @endforeach
+                                    @forelse($categorias as $cat)
+                                        <option value="{{ $cat->id }}">{{ $cat->nombre }}</option>
+                                    @empty
+                                        <option value="">Cargá una categoría en la otra pestaña</option>
+                                    @endforelse
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small fw-bold">Estado</label>
+                                <label class="form-label small fw-semibold">Estado</label>
                                 <select name="estado" class="form-select form-select-sm">
-                                    <option value="borrador">Borrador</option>
                                     <option value="publicado">Publicado</option>
+                                    <option value="borrador">Borrador</option>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small fw-bold">URL Imagen</label>
-                                <input type="url" name="imagen_url" class="form-control form-control-sm" placeholder="https://...">
+                                <label class="form-label small fw-semibold">URL de la Imagen</label>
+                                <input type="url" name="imagen_url" class="form-control form-control-sm" placeholder="https://images.unsplash.com/...">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label small fw-bold">Contenido</label>
-                                <textarea name="contenido" class="form-control form-control-sm" rows="4" required></textarea>
+                                <label class="form-label small fw-semibold">Cuerpo de la Nota</label>
+                                <textarea name="contenido" class="form-control form-control-sm" rows="4" required placeholder="Escribí acá..."></textarea>
                             </div>
-                            <button type="submit" class="btn btn-warning btn-sm w-100 fw-bold rounded-pill">Publicar Artículo</button>
+                            <button type="submit" class="btn btn-warning btn-sm w-100 fw-bold rounded-pill shadow-sm">Subir Nota</button>
                         </form>
                     </div>
                 </div>
@@ -88,10 +87,10 @@
                                 <tbody>
                                     @forelse($posts as $post)
                                     <tr>
-                                        <td class="ps-4 fw-semibold">{{ $post->titulo }}</td>
+                                        <td class="ps-4 fw-semibold text-dark">{{ $post->titulo }}</td>
                                         <td><span class="badge bg-{{ $post->estado == 'publicado' ? 'success' : 'secondary' }}">{{ $post->estado }}</span></td>
                                         <td class="text-end pe-4">
-                                            <form action="{{ route('editor.posts.destroy', $post->id) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('editor.posts.destroy', $post->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿De verdad querés borrar esta crónica?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash3-fill"></i></button>
@@ -99,7 +98,7 @@
                                         </td>
                                     </tr>
                                     @empty
-                                    <tr><td colspan="3" class="text-center py-4 text-muted">No creaste publicaciones todavía.</td></tr>
+                                    <tr><td colspan="3" class="text-center py-4 text-muted">No redactaste ninguna crónica todavía.</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -112,35 +111,52 @@
         <div class="tab-pane fade" id="taxonomias-pane" role="tabpanel">
             <div class="row g-4">
                 <div class="col-md-6">
-                    <div class="card border-0 shadow-sm p-4 bg-white">
-                        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-folder-plus text-warning me-2"></i>Agregar Categoría</h5>
-                        <form action="{{ route('editor.categorias.store') }}" method="POST" class="d-flex gap-2 mb-3">
+                    <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
+                        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-folder-plus text-warning me-2"></i>Gestión de Categorías</h5>
+                        <form action="{{ route('editor.categorias.store') }}" method="POST" class="d-flex gap-2 mb-4">
                             @csrf
-                            <input type="text" name="name" class="form-control form-control-sm" required placeholder="Ej: Básquet">
-                            <button type="submit" class="btn btn-warning btn-sm fw-bold px-3 rounded-pill">Añadir</button>
+                            <input type="text" name="name" class="form-control form-control-sm" required placeholder="Ej: Eliminatorias">
+                            <button type="submit" class="btn btn-warning btn-sm fw-bold px-3 rounded-pill shadow-sm">Añadir</button>
                         </form>
-                        <h6 class="fw-bold small text-muted">Categorías en el Sistema:</h6>
-                        <div class="d-flex flex-wrap gap-2">
+                        
+                        <h6 class="fw-bold small text-muted mb-2">Categorías creadas (con opción de eliminar):</h6>
+                        <ul class="list-group">
                             @foreach($categorias as $cat)
-                                <span class="badge bg-light text-dark border p-2"><i class="bi bi-tag-fill text-warning me-1"></i> {{ $cat->name }}</span>
+                                <li class="list-group-item d-flex justify-content-between align-items-center bg-light border-0 mb-2 rounded-3">
+                                    <span><i class="bi bi-tag-fill text-warning me-2"></i>{{ $cat->nombre }}</span>
+                                    <form action="{{ route('editor.categorias.destroy', $cat->id) }}" method="POST" onsubmit="return confirm('¿De verdad querés eliminar esta categoría?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm text-danger border-0 p-0 bg-transparent"><i class="bi bi-trash3-fill"></i></button>
+                                    </form>
+                                </li>
                             @endforeach
-                        </div>
+                        </ul>
                     </div>
                 </div>
+                
                 <div class="col-md-6">
-                    <div class="card border-0 shadow-sm p-4 bg-white">
-                        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-bookmark-plus text-warning me-2"></i>Agregar Etiqueta (Tag)</h5>
-                        <form action="{{ route('editor.etiquetas.store') }}" method="POST" class="d-flex gap-2 mb-3">
+                    <div class="card border-0 shadow-sm p-4 bg-white rounded-3">
+                        <h5 class="fw-bold text-dark mb-3"><i class="bi bi-bookmark-plus text-warning me-2"></i>Gestión de Etiquetas (Tags)</h5>
+                        <form action="{{ route('editor.etiquetas.store') }}" method="POST" class="d-flex gap-2 mb-4">
                             @csrf
-                            <input type="text" name="name" class="form-control form-control-sm" required placeholder="Ej: #Scaloneta">
-                            <button type="submit" class="btn btn-warning btn-sm fw-bold px-3 rounded-pill">Añadir</button>
+                            <input type="text" name="name" class="form-control form-control-sm" required placeholder="Ej: Scaloneta">
+                            <button type="submit" class="btn btn-warning btn-sm fw-bold px-3 rounded-pill shadow-sm">Añadir</button>
                         </form>
-                        <h6 class="fw-bold small text-muted">Etiquetas en el Sistema:</h6>
+                        
+                        <h6 class="fw-bold small text-muted mb-2">Etiquetas activas:</h6>
                         <div class="d-flex flex-wrap gap-2">
                             @forelse($etiquetas as $tag)
-                                <span class="badge bg-dark text-white p-2">#{{ $tag->name }}</span>
+                                <div class="badge bg-dark text-white p-2 d-flex align-items-center gap-2 rounded-pill shadow-sm">
+                                    <span>#{{ $tag->nombre }}</span>
+                                    <form action="{{ route('editor.etiquetas.destroy', $tag->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar esta etiqueta?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm p-0 m-0 text-danger border-0 bg-transparent line-height-1"><i class="bi bi-x-circle-fill"></i></button>
+                                    </form>
+                                </div>
                             @empty
-                                <span class="text-muted small">No hay etiquetas creadas todavía.</span>
+                                <span class="text-muted small">No hay etiquetas cargadas.</span>
                             @endforelse
                         </div>
                     </div>
@@ -149,29 +165,45 @@
         </div>
 
         <div class="tab-pane fade" id="comentarios-pane" role="tabpanel">
-            <div class="card border-0 shadow-sm bg-white">
+            <div class="card border-0 shadow-sm bg-white rounded-3">
                 <div class="card-body p-0">
-                    <table class="table align-middle mb-0">
+                    <table class="table align-middle mb-0 table-hover">
                         <thead class="table-light">
                             <tr>
                                 <th class="ps-4">Usuario</th>
                                 <th>Comentario</th>
-                                <th>Artículo</th>
-                                <th class="text-end pe-4">Acción de Moderación</th>
+                                <th>Nota Relacionada</th>
+                                <th class="text-end pe-4">Acciones de Moderación</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($comentarios as $com)
+                            @forelse($comentarios as $com)
                             <tr>
-                                <td class="ps-4 fw-bold text-secondary">{{ $com['usuario'] }}</td>
-                                <td class="italic">"{{ $com['texto'] }}"</td>
-                                <td><span class="badge bg-light text-dark border">{{ $com['post'] }}</span></td>
+                                <td class="ps-4 fw-bold text-secondary">{{ $com->usuario ?? 'Anónimo' }}</td>
+                                <td class="fst-italic">"{{ $com->contenido ?? '' }}"</td>
+                                <td><span class="badge bg-light text-dark border">{{ $com->post ?? 'General' }}</span></td>
                                 <td class="text-end pe-4">
-                                    <button class="btn btn-xs btn-outline-success border-0 me-2" onclick="alert('Comentario aprobado')"><i class="bi bi-check-circle-fill"></i> Aprobar</button>
-                                    <button class="btn btn-xs btn-outline-danger border-0" onclick="alert('Comentario rechazado/eliminado')"><i class="bi bi-x-circle-fill"></i> Rechazar</button>
+                                    <form action="{{ route('editor.comentarios.aprobar', $com->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-outline-success border-0 me-2">
+                                            <i class="bi bi-check-circle-fill me-1"></i> Aprobar
+                                        </button>
+                                    </form>
+
+                                    <form action="{{ route('editor.comentarios.destroy', $com->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Confirmás que querés dar de baja este comentario?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger border-0">
+                                            <i class="bi bi-x-circle-fill me-1"></i> Rechazar
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
-                            @endforeach
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">No hay comentarios en la plataforma en este momento.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

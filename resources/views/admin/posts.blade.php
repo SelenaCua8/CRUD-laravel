@@ -45,9 +45,11 @@
                                 {{ ucfirst($post->estado) }}
                             </span>
                         </td>
-                        <td class="small text-muted">{{ $post->created_at->format('d/m/Y H:i') }}</td>
+                        <td class="small text-muted">
+                            {{ $post->created_at ? $post->created_at->format('d/m/Y H:i') : now()->format('d/m/Y H:i') }}
+                        </td>
                         <td class="text-end pe-4">
-                            <form action="{{ route('editor.posts.destroy', $post->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de que querés eliminar este post de la plataforma?')">
+                            <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de que querés eliminar este post de la plataforma de forma definitiva?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-outline-danger border-0 rounded-circle" title="Eliminar Post">

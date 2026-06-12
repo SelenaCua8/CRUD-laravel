@@ -65,4 +65,18 @@ class AdminController extends Controller
         DB::table('categories')->where('id', $id)->delete();
         return redirect()->back()->with('success', 'Categoría eliminada correctamente.');
     }
+
+    // NUEVO: Eliminar una publicación desde el rol de Administrador
+    public function destroyPost($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        return redirect()->back()->with('success', 'La crónica fue eliminada por el Administrador.');
+    }
+    public function destroyComentario($id)
+{
+    DB::table('comments')->where('id', $id)->delete();
+    return redirect()->back()->with('success', 'El Administrador eliminó el comentario por infringir las normas.');
+}
 }

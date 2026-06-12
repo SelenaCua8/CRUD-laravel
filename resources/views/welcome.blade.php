@@ -29,7 +29,7 @@
                     <li class="nav-item"><a class="nav-link active text-white fw-semibold" href="/">Inicio</a></li>
                     @foreach($categorias as $cat)
                         <li class="nav-item">
-                            <a class="nav-link text-light-50" href="{{ route('public.categoria', $cat->id) }}">{{ $cat->name }}</a>
+                            <a class="nav-link text-light-50" href="{{ route('public.categoria', $cat->id) }}">{{ $cat->nombre }}</a>
                         </li>
                     @endforeach
                 </ul>
