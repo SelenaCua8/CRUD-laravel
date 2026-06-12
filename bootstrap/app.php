@@ -10,9 +10,12 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
-    })
+  ->withMiddleware(function (Middleware $middleware) {
+    // Le asignamos un alias al middleware para poder usarlo en las rutas
+    $middleware->alias([
+        'rol' => \App\Http\Middleware\ControlRoles::class,
+    ]);
+})
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

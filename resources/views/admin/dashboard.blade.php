@@ -10,10 +10,9 @@
     </div>
     <hr class="text-white-50">
     <nav class="nav flex-column">
-        <a class="nav-link active" href="#"><i class="bi bi-house-door"></i> Inicio</a>
-        <a class="nav-link" href="#"><i class="bi bi-people"></i> Gestión Usuarios</a>
-        <a class="nav-link" href="#"><i class="bi bi-newspaper"></i> Supervisar Posts</a>
-        <a class="nav-link" href="#"><i class="bi bi-tags"></i> Categorías y Tags</a>
+        <a class="nav-link active" href="{{ route('admin.dashboard') }}"><i class="bi bi-people"></i> Gestión Usuarios</a>
+        <a class="nav-link" href="{{ route('admin.posts') }}"><i class="bi bi-newspaper"></i> Supervisar Posts</a>
+        <a class="nav-link" href="/"><i class="bi bi-arrow-left-circle"></i> Volver al Blog</a>
     </nav>
 </div>
 @endsection

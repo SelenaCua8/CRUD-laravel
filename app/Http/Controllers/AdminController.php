@@ -4,38 +4,65 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Post;
+use Illuminate\Support\Facades\DB; // Para simular reportes rápidos
 
 class AdminController extends Controller
 {
-    // Pantalla principal del Administrador (Dashboard)
-// Pantalla principal del Administrador (Dashboard)
+    // Dashboard principal con estadísticas rápidas
     public function dashboard()
     {
-        // 1. Traemos los usuarios de la base de datos
         $usuarios = User::all();
-        
-        // 2. Contamos la cantidad total de usuarios reales
         $totalUsuarios = User::count();
-        
-        // 3. Dejamos estos fijos para el parcial así no renegás con otras tablas
-        $totalPosts = 85; 
-        $totalComentarios = 14;
+        $totalPosts = Post::count(); 
+        $totalComentarios = 14; 
 
-        // 4. Mandamos TODO a la vista
         return view('admin.dashboard', compact('usuarios', 'totalUsuarios', 'totalPosts', 'totalComentarios'));
     }
 
-    // Acción para eliminar un usuario del CRUD
+    // Supervisión de Publicaciones
+    public function supervisarPosts()
+    {
+        $posts = Post::all();
+        return view('admin.posts', compact('posts'));
+    }
+
+    // NUEVO: Gestión de Categorías para el Admin
+    public function gestionCategorias()
+    {
+        // Traemos las categorías directamente de la base de datos
+        $categorias = DB::table('categories')->get();
+        return view('admin.categorias', compact('categorias'));
+    }
+
+    // NUEVO: Acceso a Reportes y Estadísticas
+    public function reportes()
+    {
+        $totalUsuarios = User::count();
+        $totalPosts = Post::count();
+        
+        // Simulación de datos para gráficos rápidos de Bootstrap
+        $postsPublicados = Post::where('estado', 'publicado')->count();
+        $postsBorrador = Post::where('estado', 'borrador')->count();
+
+        return view('admin.reportes', compact('totalUsuarios', 'totalPosts', 'postsPublicados', 'postsBorrador'));
+    }
+
+    // Eliminar un usuario
     public function destroy($id)
     {
         $usuario = User::findOrFail($id);
-        
-        // Evita que te borres a vos misma si estás logueada
         if ($usuario->id === auth()->id()) {
             return redirect()->back()->with('error', 'No podés borrar tu propia cuenta.');
         }
-
         $usuario->delete();
         return redirect()->back()->with('success', 'Usuario eliminado correctamente.');
+    }
+
+    // Eliminar una categoría
+    public function destroyCategoria($id)
+    {
+        DB::table('categories')->where('id', $id)->delete();
+        return redirect()->back()->with('success', 'Categoría eliminada correctamente.');
     }
 }

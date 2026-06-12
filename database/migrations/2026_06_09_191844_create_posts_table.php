@@ -24,6 +24,7 @@ public function up(): void
         
         $table->timestamps();
     });
+    
 }
     /**
      * Reverse the migrations.
