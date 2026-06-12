@@ -34,24 +34,41 @@
                     @endforeach
                 </ul>
                 
-                <div class="d-flex gap-2">
-                    @if (Route::has('login'))
-                        @auth
-                            <a href="{{ url('/dashboard') }}" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm"><i class="bi bi-speedometer2 me-1"></i> Ir a mi Panel</a>
-                            <form method="POST" action="{{ route('logout') }}" class="m-0">
-                                @csrf
-                                <button type="submit" class="btn btn-outline-light rounded-pill"><i class="bi bi-box-arrow-right"></i></button>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill px-3">Ingresar</a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="btn btn-warning rounded-pill px-3 fw-bold text-dark">Registrarse</a>
-                            @endif
-                        @endauth
-                    @endif
-                </div>
-            </div>
-        </div>
+               <div class="d-flex align-items-center gap-2">
+    @auth
+        @if(auth()->user()->role_id == 1)
+            <a href="{{ url('/admin/dashboard') }}" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+                <i class="bi bi-shield-lock-fill"></i> Panel Admin
+            </a>
+        @endif
+
+        @if(auth()->user()->role_id == 2)
+            <a href="{{ url('/editor/dashboard') }}" class="btn btn-warning text-dark rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+                <i class="bi bi-pencil-square"></i> Panel Editor
+            </a>
+        @endif
+
+        @if(auth()->user()->role_id == 3)
+            <a href="{{ url('/espectador/dashboard') }}" class="btn btn-secondary rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+                <i class="bi bi-person-workspace"></i> Mi Espacio Lector
+            </a>
+        @endif
+
+        <form id="logout-form-public" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
+        <button class="btn btn-outline-light rounded-circle p-2 d-flex align-items-center justify-content-center" 
+                style="width: 38px; height: 38px;" 
+                onclick="event.preventDefault(); document.getElementById('logout-form-public').submit();" 
+                title="Cerrar Sesión">
+            <i class="bi bi-box-arrow-right"></i>
+        </button>
+
+    @else
+        <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill px-3 fw-semibold small">Ingresar</a>
+        <a href="{{ route('register') }}" class="btn btn-light text-success fw-bold rounded-pill px-3 small shadow-sm">Registrarse</a>
+    @endauth
+</div>
     </nav>
 
     <header class="hero-section text-center mb-5">

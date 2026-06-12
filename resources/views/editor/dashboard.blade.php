@@ -168,44 +168,37 @@
             <div class="card border-0 shadow-sm bg-white rounded-3">
                 <div class="card-body p-0">
                     <table class="table align-middle mb-0 table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="ps-4">Usuario</th>
-                                <th>Comentario</th>
-                                <th>Nota Relacionada</th>
-                                <th class="text-end pe-4">Acciones de Moderación</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($comentarios as $com)
-                            <tr>
-                                <td class="ps-4 fw-bold text-secondary">{{ $com->usuario ?? 'Anónimo' }}</td>
-                                <td class="fst-italic">"{{ $com->contenido ?? '' }}"</td>
-                                <td><span class="badge bg-light text-dark border">{{ $com->post ?? 'General' }}</span></td>
-                                <td class="text-end pe-4">
-                                    <form action="{{ route('editor.comentarios.aprobar', $com->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-outline-success border-0 me-2">
-                                            <i class="bi bi-check-circle-fill me-1"></i> Aprobar
-                                        </button>
-                                    </form>
-
-                                    <form action="{{ route('editor.comentarios.destroy', $com->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Confirmás que querés dar de baja este comentario?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger border-0">
-                                            <i class="bi bi-x-circle-fill me-1"></i> Rechazar
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="4" class="text-center py-4 text-muted">No hay comentarios en la plataforma en este momento.</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+    <thead class="table-light">
+        <tr>
+            <th class="ps-4">Usuario</th>
+            <th>Comentario</th>
+            <th>Nota Relacionada</th>
+            <th class="text-end pe-4">Acciones de Moderación</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($comentarios as $com)
+        <tr>
+            <td class="ps-4 fw-bold text-secondary">{{ optional($com)->usuario ?? 'Anónimo' }}</td>
+            <td class="fst-italic">"{{ $com->contenido ?? '' }}"</td>
+            <td><span class="badge bg-light text-dark border">{{ $com->post ?? 'General' }}</span></td>
+            <td class="text-end pe-4">
+                <form action="{{ route('editor.comentarios.destroy', $com->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Confirmás que querés eliminar este comentario de la plataforma?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-sm btn-outline-danger border-0">
+                        <i class="bi bi-trash3-fill me-1"></i> Eliminar Comentario
+                    </button>
+                </form>
+            </td>
+        </tr>
+        @empty
+        <tr>
+            <td colspan="4" class="text-center py-4 text-muted">No hay comentarios en la plataforma en este momento.</td>
+        </tr>
+        @endforelse
+    </tbody>
+</table>
                 </div>
             </div>
         </div>

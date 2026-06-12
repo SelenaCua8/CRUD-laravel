@@ -23,15 +23,15 @@
                 </h5>
                 <div class="d-flex align-items-center gap-3">
                    <span class="fw-semibold text-dark">{{ Auth::user()->name ?? 'Invitado' }}</span>
-                   <!-- <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill fw-bold">
-                            <i class="bi bi-box-arrow-right"></i> Salir
-                        </button>
-                    </form>-->
-                    <a href="#" class="btn btn-outline-danger btn-sm rounded-pill fw-bold">
-    <i class="bi bi-box-arrow-right"></i> Salir
-</a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+</form>
+
+<button class="btn btn-outline-danger btn-sm rounded-pill px-3" 
+        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+    <i class="bi bi-box-arrow-right me-1"></i> Salir
+</button>
+               
                 </div>
             </div>
         </div>
