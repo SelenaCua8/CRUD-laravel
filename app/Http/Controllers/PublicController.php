@@ -24,11 +24,11 @@ class PublicController extends Controller
         // 1. Buscamos el post por ID
         $post = Post::findOrFail($id);
 
-        // 2. Traemos ÚNICAMENTE los comentarios de este post que estén 'aprobado' (Uniendo con la tabla users para el nombre)
+        // 2. Trae los comentarios del post, es si esta aprobado o no, pero para mas adelante para el final
         $comentarios = DB::table('comments')
             ->join('users', 'comments.user_id', '=', 'users.id')
             ->where('comments.post_id', $id)
-            ->where('comments.estado', 'aprobado') // <-- Usa 'aprobado' que es el valor real de tu migración
+            ->where('comments.estado', 'aprobado') 
             ->select('comments.*', 'users.name as nombre_usuario')
             ->orderBy('comments.created_at', 'desc')
             ->get();

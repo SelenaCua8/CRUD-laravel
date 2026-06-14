@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // A. PRIMERO CREAMOS LA TABLA DE ROLES
+        // 1. TABLA DE ROLES
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->unique();
             $table->timestamps();
         });
 
-        // B. DESPUÉS CREAMOS LA TABLA DE USUARIOS (Ya puede usar la FK sin romper nada)
+        // 2. TABLA DE USUARIOS 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -40,7 +40,7 @@ return new class extends Migration
             $table->timestamp('created_at')->nullable();
         });
 
-        // D. TABLA DE SESIONES (Laravel)
+        // D. TABLA DE SESIONES 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
@@ -59,6 +59,6 @@ return new class extends Migration
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('users');
-        Schema::dropIfExists('roles'); // Borramos roles al final en el down
+        Schema::dropIfExists('roles'); 
     }
 };

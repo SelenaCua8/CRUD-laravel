@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
-    // 1. Mostrar el Dashboard con toda la data junta
+    // 1. Dashboard con toda la info junta
     public function index()
     {
         // Si es Admin ve todo para supervisar, si es Editor ve solo lo suyo
@@ -16,7 +16,7 @@ class PostController extends Controller
             ? Post::all() 
             : Post::where('user_id', auth()->id())->get();
 
-        // Traemos las categorías de la base de datos para el select del formulario
+        // Traemos las categorías de la base de datos para el select del formulario 
         $categorias = DB::table('categories')->get();
         
         // Traemos las etiquetas de la base de datos
@@ -30,7 +30,7 @@ class PostController extends Controller
             ->orderBy('comments.created_at', 'desc')
             ->get();
 
-        // ¡ESTO ERA LO QUE FALTABA! Le devolvemos la vista a Laravel con la data
+        // Le devuelvo la vista a Laravel con la data
         return view('editor.dashboard', compact('posts', 'categorias', 'etiquetas', 'comentarios'));
     }
 
@@ -57,7 +57,7 @@ class PostController extends Controller
         return redirect()->back()->with('success', '¡Crónica publicada con éxito!');
     }
 
-    // 3. CRUD: Crear Categoría desde el Panel (¡CON SLUG INCLUIDO!)
+    // 3. CRUD: Crear Categoría desde el Panel
     public function storeCategoria(Request $request)
     {
         $request->validate(['name' => 'required|string|max:255']);
@@ -72,7 +72,7 @@ class PostController extends Controller
         return redirect()->back()->with('success', '¡Categoría guardada con éxito!');
     }
 
-    // 4. CRUD: Crear Etiqueta (Tag) desde el Panel
+    // 4. CRUD: Crear Etiqueta desde el Panel
     public function storeEtiqueta(Request $request)
     {
         $request->validate(['name' => 'required|string|max:255']);
@@ -86,7 +86,7 @@ class PostController extends Controller
         return redirect()->back()->with('success', 'Etiqueta registrada.');
     }
 
-    // 5. CRUD: Eliminar Nota
+    // 5. CRUD: Eliminar el post
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
@@ -108,17 +108,47 @@ class PostController extends Controller
         return redirect()->back()->with('success', 'Etiqueta eliminada con éxito.');
     }
 
-    // 8. MODERACIÓN: Eliminar/Rechazar comentario
+    // 8. Eliminar comentario
     public function destroyComentario($id)
     {
         DB::table('comments')->where('id', $id)->delete();
         return redirect()->back()->with('success', 'Comentario moderado y eliminado correctamente.');
     }
 
-    // 9. MODERACIÓN: El Editor aprueba el comentario cambiándole el estado
+    // 9. El Editor aprueba el comentario cambiándole el estado
     public function aprobarComentario($id)
     {
         DB::table('comments')->where('id', $id)->update(['estado' => 'aprobado', 'updated_at' => now()]);
         return redirect()->back()->with('success', 'Comentario aprobado. Ya se ve en el blog público.');
+    }
+
+    // 10. CRUD: Muestra el formulario de edición (Limpio y único)
+    public function edit($id)
+    {
+        $post = DB::table('posts')->where('id', $id)->first();
+        $categorias = DB::table('categories')->get();
+
+        return view('editor.edit', compact('post', 'categorias'));
+    }
+
+    // 11. CRUD: Guarda los cambios de la edición
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'titulo' => 'required',
+            'contenido' => 'required',
+            'category_id' => 'required'
+        ]);
+
+        DB::table('posts')->where('id', $id)->update([
+            'titulo' => $request->titulo,
+            'contenido' => $request->contenido,
+            'category_id' => $request->category_id,
+            'estado' => $request->estado,
+            'imagen_url' => $request->imagen_url,
+            'updated_at' => now()
+        ]);
+
+        return redirect()->route('editor.dashboard')->with('success', 'Crónica actualizada correctamente.');
     }
 }

@@ -14,7 +14,7 @@ class CommentController extends Controller
         'contenido' => 'required|string|max:1000'
     ]);
 
-    // Guardamos directo con estado 'aprobado'
+    // Aca   guardo directo con estado 'aprobado', el admin y el editor en caso de que no les guste lo veran cuando puedan y si quieren lo borran
     DB::table('comments')->insert([
         'post_id' => $request->post_id,
         'user_id' => auth()->id(), 

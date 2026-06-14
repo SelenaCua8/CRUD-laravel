@@ -49,6 +49,10 @@
                             {{ $post->created_at ? $post->created_at->format('d/m/Y H:i') : now()->format('d/m/Y H:i') }}
                         </td>
                         <td class="text-end pe-4">
+                            <a href="{{ url('/posts/' . $post->id) }}" target="_blank" class="btn btn-sm btn-outline-primary border-0 me-1" title="Ver publicación completa">
+                                <i class="bi bi-eye-fill"></i> Ver más
+                            </a>
+
                             <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de que querés eliminar este post de la plataforma de forma definitiva?')">
                                 @csrf
                                 @method('DELETE')

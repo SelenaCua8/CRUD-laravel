@@ -12,6 +12,7 @@
     <nav class="nav flex-column">
         <a class="nav-link active" href="{{ route('admin.dashboard') }}"><i class="bi bi-people"></i> Gestión Usuarios</a>
         <a class="nav-link" href="{{ route('admin.posts') }}"><i class="bi bi-newspaper"></i> Supervisar Posts</a>
+        <a class="nav-link" href="{{ route('admin.comentarios') }}"><i class="bi bi-chat-left-text"></i> Moderar Comentarios</a>
         <a class="nav-link" href="/"><i class="bi bi-arrow-left-circle"></i> Volver al Blog</a>
     </nav>
 </div>

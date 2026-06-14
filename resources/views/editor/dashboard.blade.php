@@ -36,7 +36,7 @@
         <div class="tab-pane fade show active" id="posts-pane" role="tabpanel">
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-4 bg-white border-top border-warning border-4 rounded-3">
+                    <div class="card shadow-sm p-4 bg-white border-top border-warning border-4 rounded-3">
                         <h5 class="fw-bold text-dark mb-3"><i class="bi bi-pencil-square text-warning me-2"></i>Nueva Nota</h5>
                         <form action="{{ route('editor.posts.store') }}" method="POST">
                             @csrf
@@ -89,11 +89,17 @@
                                     <tr>
                                         <td class="ps-4 fw-semibold text-dark">{{ $post->titulo }}</td>
                                         <td><span class="badge bg-{{ $post->estado == 'publicado' ? 'success' : 'secondary' }}">{{ $post->estado }}</span></td>
-                                        <td class="text-end pe-4">
-                                            <form action="{{ route('editor.posts.destroy', $post->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿De verdad querés borrar esta crónica?');">
+                                        <td class="text-end pe-4 text-nowrap">
+                                            <a href="{{ route('editor.posts.edit', $post->id) }}" class="btn btn-sm btn-outline-warning border-0 me-1" title="Editar Crónica">
+                                                <i class="bi bi-pencil-fill me-1"></i> Editar
+                                            </a>
+
+                                            <form action="{{ route('editor.comentarios.destroy', $post->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Estás seguro de que querés eliminar los comentarios de esta nota?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash3-fill"></i></button>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger border-0 rounded-circle" title="Limpiar comentarios">
+                                                    <i class="bi bi-trash3-fill"></i>
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
@@ -168,37 +174,37 @@
             <div class="card border-0 shadow-sm bg-white rounded-3">
                 <div class="card-body p-0">
                     <table class="table align-middle mb-0 table-hover">
-    <thead class="table-light">
-        <tr>
-            <th class="ps-4">Usuario</th>
-            <th>Comentario</th>
-            <th>Nota Relacionada</th>
-            <th class="text-end pe-4">Acciones de Moderación</th>
-        </tr>
-    </thead>
-    <tbody>
-        @forelse($comentarios as $com)
-        <tr>
-            <td class="ps-4 fw-bold text-secondary">{{ optional($com)->usuario ?? 'Anónimo' }}</td>
-            <td class="fst-italic">"{{ $com->contenido ?? '' }}"</td>
-            <td><span class="badge bg-light text-dark border">{{ $com->post ?? 'General' }}</span></td>
-            <td class="text-end pe-4">
-                <form action="{{ route('editor.comentarios.destroy', $com->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Confirmás que querés eliminar este comentario de la plataforma?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-outline-danger border-0">
-                        <i class="bi bi-trash3-fill me-1"></i> Eliminar Comentario
-                    </button>
-                </form>
-            </td>
-        </tr>
-        @empty
-        <tr>
-            <td colspan="4" class="text-center py-4 text-muted">No hay comentarios en la plataforma en este momento.</td>
-        </tr>
-        @endforelse
-    </tbody>
-</table>
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">Usuario</th>
+                                <th>Comentario</th>
+                                <th>Nota Relacionada</th>
+                                <th class="text-end pe-4">Acciones de Moderación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($comentarios as $com)
+                            <tr>
+                                <td class="ps-4 fw-bold text-secondary">{{ optional($com)->usuario ?? 'Anónimo' }}</td>
+                                <td class="fst-italic">"{{ $com->contenido ?? '' }}"</td>
+                                <td><span class="badge bg-light text-dark border">{{ $com->post ?? 'General' }}</span></td>
+                                <td class="text-end pe-4">
+                                    <form action="{{ route('editor.comentarios.destroy', $com->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Confirmás que querés eliminar este comentario de la plataforma?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger border-0">
+                                            <i class="bi bi-trash3-fill me-1"></i> Eliminar Comentario
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">No hay comentarios en la plataforma en este momento.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
