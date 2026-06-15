@@ -6,15 +6,8 @@
     <title>Mundial 360 - El Templo del Fútbol</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .navbar-futbol { background-color: #0b3c1b; } /* Verde Césped Oscuro */
-        .hero-section { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1508096682722-e99c43a406b2?w=1200') no-repeat center center/cover; color: white; padding: 60px 0; }
-        .card-post { border: none; border-radius: 12px; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .card-post:hover { transform: translateY(-5px); }
-        .badge-futbol { background-color: #198754; }
-        .fixture-header { background-color: #0d2315; color: #fff; font-weight: bold; }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  
 </head>
 <body>
 
@@ -22,7 +15,7 @@
         <div class="container">
             <a class="navbar-brand fw-bold fs-3 text-warning" href="/"><i class="bi bi-trophy-fill me-2"></i>MUNDIAL 360</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-span"></span>
+                <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -34,41 +27,42 @@
                     @endforeach
                 </ul>
                 
-               <div class="d-flex align-items-center gap-2">
-    @auth
-        @if(auth()->user()->role_id == 1)
-            <a href="{{ url('/admin/dashboard') }}" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
-                <i class="bi bi-shield-lock-fill"></i> Panel Admin
-            </a>
-        @endif
+                <div class="d-flex align-items-center gap-2">
+                    @auth
+                        @if(auth()->user()->role_id == 1)
+                            <a href="{{ url('/admin/dashboard') }}" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+                                <i class="bi bi-shield-lock-fill"></i> Panel Admin
+                            </a>
+                        @endif
 
-        @if(auth()->user()->role_id == 2)
-            <a href="{{ url('/editor/dashboard') }}" class="btn btn-warning text-dark rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
-                <i class="bi bi-pencil-square"></i> Panel Editor
-            </a>
-        @endif
+                        @if(auth()->user()->role_id == 2)
+                            <a href="{{ url('/editor/dashboard') }}" class="btn btn-warning text-dark rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+                                <i class="bi bi-pencil-square"></i> Panel Editor
+                            </a>
+                        @endif
 
-        @if(auth()->user()->role_id == 3)
-            <a href="{{ url('/espectador/dashboard') }}" class="btn btn-secondary rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
-                <i class="bi bi-person-workspace"></i> Mi Espacio Lector
-            </a>
-        @endif
+                        @if(auth()->user()->role_id == 3)
+                            <a href="{{ url('/espectador/dashboard') }}" class="btn btn-secondary rounded-pill px-4 fw-bold shadow-sm d-flex align-items-center gap-2">
+                                <i class="bi bi-person-workspace"></i> Mi Espacio Lector
+                            </a>
+                        @endif
 
-        <form id="logout-form-public" action="{{ route('logout') }}" method="POST" class="d-none">
-            @csrf
-        </form>
-        <button class="btn btn-outline-light rounded-circle p-2 d-flex align-items-center justify-content-center" 
-                style="width: 38px; height: 38px;" 
-                onclick="event.preventDefault(); document.getElementById('logout-form-public').submit();" 
-                title="Cerrar Sesión">
-            <i class="bi bi-box-arrow-right"></i>
-        </button>
-
-    @else
-        <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill px-3 fw-semibold small">Ingresar</a>
-        <a href="{{ route('register') }}" class="btn btn-light text-success fw-bold rounded-pill px-3 small shadow-sm">Registrarse</a>
-    @endauth
-</div>
+                        <form id="logout-form-public" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                        <button class="btn btn-outline-light rounded-circle p-2 d-flex align-items-center justify-content-center" 
+                                style="width: 38px; height: 38px;" 
+                                onclick="event.preventDefault(); document.getElementById('logout-form-public').submit();" 
+                                title="Cerrar Sesión">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </button>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-outline-light rounded-pill px-3 fw-semibold small">Ingresar</a>
+                        <a href="{{ route('register') }}" class="btn btn-light text-success fw-bold rounded-pill px-3 small shadow-sm">Registrarse</a>
+                    @endauth
+                </div>
+            </div>
+        </div>
     </nav>
 
     <header class="hero-section text-center mb-5">
@@ -90,15 +84,21 @@
                     <div class="col-md-6">
                         <div class="card card-post h-100 overflow-hidden bg-white">
                             <img src="{{ $post->imagen_url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Imagen Nota">
-                            <div class="card-body d-flex flex-direction-column justify-content-between">
+                            
+                            <div class="card-body d-flex flex-column justify-content-between">
                                 <div>
                                     <span class="badge badge-futbol mb-2">Categoría ID: {{ $post->category_id }}</span>
                                     <h5 class="card-title fw-bold text-dark text-line-2">{{ $post->titulo }}</h5>
                                     <p class="card-text text-muted small text-line-3">{{ Str::limit($post->contenido, 110) }}</p>
                                 </div>
-                                <div class="mt-3 pt-3 border-top w-100 d-flex justify-content-between align-items-center">
-                                    <span class="small text-muted"><i class="bi bi-calendar3 me-1"></i> {{ $post->created_at->format('d/m/Y') }}</span>
-                                    <a href="{{ route('public.detalle', $post->id) }}" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">Leer Nota</a>
+                                
+                                <div class="mt-4 pt-3 border-top w-100 d-flex justify-content-between align-items-center">
+                                    <span class="small text-muted">
+                                        <i class="bi bi-calendar3 me-1"></i> {{ is_string($post->created_at) ? date('d/m/Y', strtotime($post->created_at)) : $post->created_at->format('d/m/Y') }}
+                                    </span>
+                                    <a href="{{ url('/posts/'.$post->id) }}" class="btn btn-sm btn-success rounded-pill px-3 fw-bold shadow-sm">
+                                        Ver más <i class="bi bi-arrow-right-short ms-1"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>

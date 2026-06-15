@@ -151,4 +151,28 @@ class PostController extends Controller
 
         return redirect()->route('editor.dashboard')->with('success', 'Crónica actualizada correctamente.');
     }
+
+    // 12. VISTA PÚBLICA: Muestra la crónica individual con sus comentarios (Ruta hacia admin.show)
+    public function show($id)
+    {
+        // Buscamos el posteo específico en la base de datos
+        $post = DB::table('posts')->where('id', $id)->first();
+
+        // Si por alguna razón el post no existe, tiramos un error 404
+        if (!$post) {
+            abort(404, 'La crónica no existe.');
+        }
+
+        // Buscamos SOLO los comentarios que pertenecen a este post_id
+        $comentarios = DB::table('comments')
+            ->join('users', 'comments.user_id', '=', 'users.id')
+            ->where('comments.post_id', $id)
+            ->select('comments.*', 'users.name as usuario')
+            ->orderBy('comments.created_at', 'asc')
+            ->get();
+
+        return view('public.detalle', compact('post', 'comentarios'));
+    }
+
+    
 }

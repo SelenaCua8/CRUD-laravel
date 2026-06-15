@@ -20,8 +20,9 @@
                 <div class="card border-0 shadow-sm rounded-3 overflow-hidden bg-white h-100">
                     <div class="card-body">
                         <h4 class="fw-bold text-dark">{{ $post->titulo }}</h4>
-                        <p class="text-muted small mb-3">Publicado el {{ $post->created_at->format('d/m/Y') }}</p>
-                        <a href="{{ route('public.detalle', $post->id) }}" class="btn btn-sm btn-success rounded-pill">Leer Artículo Completo</a>
+                        <p class="text-muted small mb-3">Publicado el {{ is_string($post->created_at) ? date('d/m/Y', strtotime($post->created_at)) : $post->created_at->format('d/m/Y') }}</p>
+                        
+                        <a href="{{ url('/posts/'.$post->id) }}" class="btn btn-sm btn-success rounded-pill">Leer Artículo Completo</a>
                     </div>
                 </div>
             </div>

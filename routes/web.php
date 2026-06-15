@@ -111,6 +111,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/comentarios', [CommentController::class, 'store'])->name('comments.store');
 });
 
+// Ruta pública para ver una crónica completa
+Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+
 
 // Sistema de autenticación de Breeze
 require __DIR__.'/auth.php';
