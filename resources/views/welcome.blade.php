@@ -162,7 +162,7 @@
 
                 <div class="card bg-dark text-white border-0 rounded-3 shadow-sm p-4 mt-4 text-center">
                     <h5 class="fw-bold text-warning mb-2"><i class="bi bi-lightning-charge-fill"></i> ¿Querés ser redactor?</h5>
-                    <p class="small text-white-50">Registrate como Editor y empezá a subir tus propios análisis tácticos y crónicas de partidos directamente a la base de datos.</p>
+                    <p class="small text-white-50">Para registrate como Editor manda un mail a Blog@mundial360.com y empezá a subir tus propios análisis tácticos y crónicas de partidos directamente a la base de datos.</p>
                 </div>
             </div>
 
